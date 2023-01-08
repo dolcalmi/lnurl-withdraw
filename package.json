@@ -1,6 +1,6 @@
 {
   "name": "lnurl-withdraw",
-  "version": "0.1.2",
+  "version": "1.0.0",
   "description": "Client library for lnurl-withdraw",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
