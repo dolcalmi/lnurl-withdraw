@@ -19,7 +19,7 @@ yarn add lnurl-withdraw
 ```js
 import { requestPayment } from 'lnurl-withdraw'
 
-const { requested, params, invoice, hasValidAmount, hasValidDescription } =
+const { sent, params, invoice, hasValidAmount, hasValidDescription } =
   await requestPayment({
     lnUrl:
       'lnurl1dp68gurn8ghj7amfw35xgunpwuh8xarpva5kueewvaskcmme9e5k7tewwajkcmpdddhx7amw9akxuatjd3mj7ar9wd6xjmn8jx0750',
@@ -51,7 +51,7 @@ Request a payment to a lnurl service
 
 @returns
 {
-  requested: <True if returned status is OK Bool>
+  sent: <True if returned status is OK Bool>
   invoice: <Invoice param String>
   hasValidAmount: <True if the invoice amount is a valid amount according to returned min and max values Bool>
   hasValidDescription: <True if the invoice description is equal to service returned description Bool>
@@ -71,7 +71,7 @@ Request a payment to a lnurl service
 Example:
 
 ```node
-const { requested, params, invoice, hasValidAmount, hasValidDescription } =
+const { sent, params, invoice, hasValidAmount, hasValidDescription } =
   await requestPayment({
     lnUrl:
       'lnurl1dp68gurn8ghj7amfw35xgunpwuh8xarpva5kueewvaskcmme9e5k7tewwajkcmpdddhx7amw9akxuatjd3mj7ar9wd6xjmn8jx0750',
@@ -141,7 +141,7 @@ Request a payment to a lnurl with the given invoice and service params (2nd step
 
 @returns
 {
-  requested: <True if returned status is OK Bool>
+  sent: <True if returned status is OK Bool>
   invoice: <Invoice param String>
   hasValidAmount: <True if the invoice amount is a valid amount according to returned min and max values Bool>
   hasValidDescription: <True if the invoice description is equal to service returned description Bool>

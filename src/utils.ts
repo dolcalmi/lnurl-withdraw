@@ -1,12 +1,11 @@
 import axios, { AxiosError } from 'axios'
-import isURL from 'is-url'
 import { bech32 } from 'bech32'
 import * as bolt11 from 'bolt11'
 
 import type { Satoshis } from './types'
 
 const LNURL_REGEX =
-  /^(?:http.*[&?]lightning=|lightning:)?(lnurl[0-9]{1,}[02-9ac-hj-np-z]+)/
+  /^(?:http.*[&?]lightning=|http.*[&?]lnurlw=|lightning:|lnurlw:)?(lnurl[0-9]{1,}[02-9ac-hj-np-z]+)/
 
 const ONION_REGEX = /^(http:\/\/[^/:@]+\.onion(?::\d{1,5})?)(\/.*)?$/
 
@@ -17,10 +16,20 @@ const ONION_REGEX = /^(http:\/\/[^/:@]+\.onion(?::\d{1,5})?)(\/.*)?$/
  * @return  plain url or null if is an invalid url or lightning address
  */
 export const decodeUrl = (lnUrl: string): string | null => {
-  const bech32Url = parseLnUrl(lnUrl)
+  if (!lnUrl) return null
+
+  let url = lnUrl
+
+  const bech32Url = parseLnUrl(url)
   if (bech32Url) {
     const decoded = bech32.decode(bech32Url, 20000)
-    return Buffer.from(bech32.fromWords(decoded.words)).toString()
+    url = Buffer.from(bech32.fromWords(decoded.words)).toString()
+  }
+
+  const parsedUrl = parseUrl(url)
+  if (parsedUrl) {
+    const newProtocol = isOnionUrl(url) ? 'http:' : 'https:'
+    return url.replace(parsedUrl.protocol, newProtocol)
   }
 
   return null
@@ -49,6 +58,15 @@ export const isLnurl = (url: string): boolean => {
   return LNURL_REGEX.test(url.toLowerCase())
 }
 
+export const parseUrl = (url: string | null): URL | null => {
+  if (!url) return null
+  try {
+    return new URL(url)
+  } catch {
+    return null
+  }
+}
+
 /**
  * Verify if a string is an url
  * @method isUrl
@@ -56,12 +74,8 @@ export const isLnurl = (url: string): boolean => {
  * @return  true if is an url
  */
 export const isUrl = (url: string | null): url is string => {
-  if (!url) return false
-  try {
-    return isURL(url)
-  } catch {
-    return false
-  }
+  const parsedUrl = parseUrl(url)
+  return !!parsedUrl
 }
 
 /**
