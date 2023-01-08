@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import isURL from 'is-url'
 import { bech32 } from 'bech32'
 import * as bolt11 from 'bolt11'
@@ -116,11 +116,22 @@ export const getJson = async ({
   url: string
   params?: { [key: string]: string | number }
 }): Promise<{ [key: string]: string | number }> => {
-  return axios.get(url, { params }).then((response) => {
-    if (response.data.status === 'ERROR')
-      throw new Error(response.data.reason + '')
-    return response.data
-  })
+  try {
+    const { status, statusText, data } = await axios.get(url, { params })
+    if (status >= 400 || data.status === 'ERROR')
+      throw new Error(
+        data.reason || data.detail || statusText || 'Invalid request'
+      )
+    return data
+  } catch (error) {
+    if (error instanceof AxiosError && error.response) {
+      const { data, statusText } = error.response
+      throw new Error(
+        data.reason || data.detail || statusText || 'Invalid request'
+      )
+    }
+    throw error
+  }
 }
 
 export const decodeInvoice = (
