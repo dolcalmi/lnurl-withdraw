@@ -55,7 +55,7 @@ export const requestPaymentWithServiceParams = async ({
   const status = data && data.status && data.status.toUpperCase()
 
   return {
-    requested: status === 'OK',
+    sent: status === 'OK',
     params,
     invoice,
     hasValidAmount,

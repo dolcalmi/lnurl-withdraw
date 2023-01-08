@@ -43,7 +43,7 @@ export type LnUrlRequestPaymentArgs = LnUrlRequestPaymentBaseArgs & {
 }
 
 export type LnUrlRequestPaymentResponse = {
-  requested: boolean
+  sent: boolean
   invoice: string
   hasValidAmount: boolean
   hasValidDescription: boolean

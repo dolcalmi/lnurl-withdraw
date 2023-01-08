@@ -24,7 +24,7 @@ describe('requestPayment', () => {
         validateInvoice: true,
       })
       expect(result).toMatchObject({
-        requested: true,
+        sent: true,
         params: { ...serviceParamsExpected },
         invoice,
         hasValidAmount: true,
