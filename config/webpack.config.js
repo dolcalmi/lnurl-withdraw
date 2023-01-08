@@ -7,7 +7,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, '../dist/umd'),
     filename: 'index.js',
-    library: 'LnurlPay',
+    library: 'LnurlWithdraw',
     libraryTarget: 'umd',
     globalObject: 'this',
   },
